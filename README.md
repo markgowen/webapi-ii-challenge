@@ -27,7 +27,7 @@ Database access will be done using the `db.js` file included inside the `data` f
 The `db.js` publishes the following methods:
 
 - [x] `find()`: calling find returns a promise that resolves to an array of all the `posts` contained in the database.
-- [ ] `findById()`: this method expects an `id` as it's only parameter and returns the post corresponding to the `id` provided or an empty array if no post with that `id` is found.
+- [x] `findById()`: this method expects an `id` as it's only parameter and returns the post corresponding to the `id` provided or an empty array if no post with that `id` is found.
 - [ ] `insert()`: calling insert passing it a `post` object will add it to the database and return an object with the `id` of the inserted post. The object looks like this: `{ id: 123 }`.
 - [ ] `update()`: accepts two arguments, the first is the `id` of the post to update and the second is an object with the `changes` to apply. It returns the count of updated records. If the count is 1 it means the record was updated correctly.
 - [ ] `remove()`: the remove method accepts an `id` as its first parameter and upon successfully deleting the post from the database it returns the number of records deleted.
@@ -136,12 +136,12 @@ When the client makes a `GET` request to `/api/posts`:
 
 When the client makes a `GET` request to `/api/posts/:id`:
 
-- [ ] If the _post_ with the specified `id` is not found:
+- [x] If the _post_ with the specified `id` is not found:
 
   - return HTTP status code `404` (Not Found).
   - return the following JSON object: `{ message: "The post with the specified ID does not exist." }`.
 
-- [ ] If there's an error in retrieving the _post_ from the database:
+- [x] If there's an error in retrieving the _post_ from the database:
   - cancel the request.
   - respond with HTTP status code `500`.
   - return the following JSON object: `{ error: "The post information could not be retrieved." }`.
