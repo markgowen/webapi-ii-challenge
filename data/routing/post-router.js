@@ -85,6 +85,33 @@ router.post('/', (req, res) => {
     });
 });
 
+// POST request to add a comment to a post by id
+router.post('/:id/comments', (req, res) => {
+    if (!req.body) {
+        res.status(400).json({ errorMessage: "Please provide text for the comment." });
+        return;
+    }
+
+    const comment = { ...req.body, postID: req.params.id };
+    console.log('comment', comment);
+
+    db.insertComment(comment)
+        .then(postID => {
+            console.log(postID.id);
+            db.findById(postID.id)
+                .then(post => {
+                    if (!post) {
+                        res.status(404).json({ message: "The post with the specified ID does not exist." });
+                    }
+                    res.status(201).json(comment);
+            });
+        })
+        .catch(err => {
+            console.log('error', err);
+            res.status(500).json({ error: "There was an error while saving the comment to the database" })
+        });
+});
+
 // PUT request to update a post
 router.put('/:id', (req, res) => {
   if (!req.body.title || !req.body.contents) {

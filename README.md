@@ -33,7 +33,7 @@ The `db.js` publishes the following methods:
 - [x] `remove()`: the remove method accepts an `id` as its first parameter and upon successfully deleting the post from the database it returns the number of records deleted.
 - [x] `findPostComments()`: the findPostComments accepts a `postId` as its first parameter and returns all comments on the post associated with the post id.
 - [ ] `findCommentById()`: accepts an `id` and returns the comment associated with that id.
-- [ ] `insertComment()`: calling insertComment while passing it a `comment` object will add it to the database and return an object with the `id` of the inserted comment. The object looks like this: `{ id: 123 }`. This method will throw an error if the `post_id` field in the `comment` object does not match a valid post id in the database.
+- [x] `insertComment()`: calling insertComment while passing it a `comment` object will add it to the database and return an object with the `id` of the inserted comment. The object looks like this: `{ id: 123 }`. This method will throw an error if the `post_id` field in the `comment` object does not match a valid post id in the database.
 
 Now that we have a way to add, update, remove and retrieve data from the provided database, it is time to work on the API.
 
@@ -105,24 +105,24 @@ When the client makes a `POST` request to `/api/posts`:
 
 When the client makes a `POST` request to `/api/posts/:id/comments`:
 
-- [ ] If the _post_ with the specified `id` is not found:
+- [x] If the _post_ with the specified `id` is not found:
 
   - return HTTP status code `404` (Not Found).
   - return the following JSON object: `{ message: "The post with the specified ID does not exist." }`.
 
-- [ ] If the request body is missing the `text` property:
+- [x] If the request body is missing the `text` property:
 
   - cancel the request.
   - respond with HTTP status code `400` (Bad Request).
   - return the following JSON response: `{ errorMessage: "Please provide text for the comment." }`.
 
-- [ ] If the information about the _comment_ is valid:
+- [x] If the information about the _comment_ is valid:
 
   - save the new _comment_ the the database.
   - return HTTP status code `201` (Created).
   - return the newly created _comment_.
 
-- [ ] If there's an error while saving the _comment_:
+- [x] If there's an error while saving the _comment_:
   - cancel the request.
   - respond with HTTP status code `500` (Server Error).
   - return the following JSON object: `{ error: "There was an error while saving the comment to the database" }`.
