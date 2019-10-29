@@ -2,6 +2,7 @@ const router = require('express').Router();
 
 const Data = require('../db');
 
+// GET request for all posts
 router.get('/', (req, res) => {
   db.find()
     .then(posts => {
@@ -15,6 +16,7 @@ router.get('/', (req, res) => {
     });
 });
 
+// GET request for post by id
 router.get('/:id', (req, res) => {
   db.findById(req.params.id)
     .then(post => {
@@ -34,13 +36,12 @@ router.get('/:id', (req, res) => {
     });
 });
 
+// POST request for a new post
 router.post('/', (req, res) => {
   if (!req.body.title || !req.body.contents) {
-    res
-      .status(400)
-      .json({
-        errorMessage: 'Please provide title and contents for the post.'
-      });
+    res.status(400).json({
+      errorMessage: 'Please provide title and contents for the post.'
+    });
     return;
   }
 
@@ -56,10 +57,40 @@ router.post('/', (req, res) => {
     })
     .catch(err => {
       console.log('error', err);
+      res.status(500).json({
+        error: 'There was an error while saving the post to the database'
+      });
+    });
+});
+
+// PUT request to update a post
+router.put('/:id', (req, res) => {
+  if (!req.body.title || !req.body.contents) {
+    res.status(400).json({
+      errorMessage: 'Please provide title and contents for the post.'
+    });
+    return;
+  }
+
+  const id = req.params.id;
+  const post = req.body;
+
+  db.update(id, post)
+    .then(post => {
+      if (!post) {
+        res
+          .status(404)
+          .json({ message: 'The post with the specified ID does not exist.' });
+        return;
+      }
+      db.findById(id).then(post => {
+        res.status(200).json(post);
+      });
+    })
+    .catch(err => {
+      console.log('error', err);
       res
         .status(500)
-        .json({
-          error: 'There was an error while saving the post to the database'
-        });
+        .json({ error: 'The post information could not be modified.' });
     });
 });
