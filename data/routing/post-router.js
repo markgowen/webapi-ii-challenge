@@ -94,3 +94,21 @@ router.put('/:id', (req, res) => {
         .json({ error: 'The post information could not be modified.' });
     });
 });
+
+// DELETE request to delete a post
+router.delete('/:id', (req, res) => {
+    const id = req.params.id;
+
+    db.remove(id)
+        .then(count => {
+            if (!count) {
+                res.status(404).json({ message: "The post with the specified ID does not exist." });
+                return;
+            }
+            res.status(200).json({ 'Successfully deleted post' });
+        })
+        .catch(err => {
+            console.log('error', err);
+            res.status(500).json({ error: "The post could not be removed" });
+        });
+});
