@@ -42,17 +42,17 @@ router.get('/:id/comments', (req, res) => {
 
   db.findPostComments(postID)
     .then(comments => {
-        db.findById(postID)
-            .then(postID => {
-                console.log(postID)
-            if (postID.length) {
-                res.status(200).json(comments);
-            } else {
-                res
-                .status(404)
-                .json({ message: 'The post with the specified ID does not exist.' });
-            }
-            })})
+      db.findById(postID).then(postID => {
+        console.log(postID);
+        if (postID.length) {
+          res.status(200).json(comments);
+        } else {
+          res.status(404).json({
+            message: 'The post with the specified ID does not exist.'
+          });
+        }
+      });
+    })
     .catch(err => {
       console.log('error', err);
       res
@@ -102,15 +102,16 @@ router.post('/:id/comments', (req, res) => {
   const comment = { ...req.body, postID: req.params.id };
   console.log('comment', comment);
 
-  db.insertComment(comment)
-    .then(postID => {
-      console.log(postID.id);
-      db.findById(postID.id).then(post => {
-        if (!post) {
-          res.status(404).json({
-            message: 'The post with the specified ID does not exist.'
-          });
-        }
+  db.findById(comment.postID)
+    .then(post => {
+      if (!post) {
+        res.status(404).json({
+          message: 'The post with the specified ID does not exist.'
+        });
+      }
+
+      db.insertComment(comment).then(postID => {
+        console.log(postID.id);
         res.status(201).json(comment);
       });
     })
@@ -163,7 +164,7 @@ router.delete('/:id', (req, res) => {
       if (!count) {
         res
           .status(404)
-          .json({ message: 'The post with the specified ID does not exist.' });
+          .json({ message: `The post with the specified ID ${id} does not exist.` });
         return;
       }
       res.status(200).json({ message: 'Successfully deleted post' });
